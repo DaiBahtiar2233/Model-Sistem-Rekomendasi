@@ -349,7 +349,209 @@ Kelebihan dari pendekatan ini:
 
 ### Content-Based Filtering (CBF)
 
+1. Visualisasi Distribusi Kategori Tempat Wisata
 
+Langkah awal dalam Content-Based Filtering adalah memahami karakteristik dari data tempat wisata. Salah satu informasi penting yang dapat dianalisis adalah kategori dari masing-masing destinasi wisata. Visualisasi ini bertujuan untuk melihat sebaran jumlah tempat wisata berdasarkan kategori seperti budaya, alam, sejarah, dan sebagainya.
+
+Dengan menggunakan grafik batang, kita dapat dengan mudah mengidentifikasi kategori yang paling dominan maupun yang jarang muncul dalam dataset. Informasi ini juga bermanfaat untuk memahami potensi kesamaan antar tempat dalam proses rekomendasi berbasis konten nantinya.
+
+![image](https://github.com/user-attachments/assets/994e1ae5-688b-4656-93a6-2f64ac66b6c4)
+
+
+2. Analisis Part-of-Speech (POS) pada Nama Tempat Wisata
+
+Untuk mendalami lebih jauh karakteristik dari nama tempat wisata, dilakukan analisis Part-of-Speech (POS) menggunakan pustaka TextBlob. POS Tagging bertujuan untuk mengidentifikasi jenis kata seperti kata benda (noun), kata sifat (adjective), kata kerja (verb), dan lainnya dari kumpulan nama tempat.
+
+Dengan menggabungkan semua nama tempat menjadi satu teks, kita dapat menganalisis frekuensi masing-masing jenis kata yang muncul. Visualisasi ini akan memberikan gambaran mengenai struktur umum penamaan tempat wisata, misalnya apakah lebih banyak menggunakan kata benda atau kata sifat.
+
+Informasi POS ini juga bisa memberikan insight tambahan jika ingin mengembangkan model rekomendasi yang mempertimbangkan karakter linguistik dari nama tempat.
+
+![image](https://github.com/user-attachments/assets/2387cf92-6aed-4a1f-b3f1-41b38f883d9e)
+
+
+3. Visualisasi Bigram Menggunakan TF-IDF pada Nama Tempat Wisata
+   
+Pada bagian ini, dilakukan analisis terhadap bigram, yaitu kombinasi dua kata yang muncul secara berurutan dalam nama tempat wisata. Untuk menghitung bobot kemunculan bigram, digunakan pendekatan TF-IDF (Term Frequency-Inverse Document Frequency) yang tidak hanya mempertimbangkan frekuensi kata, tetapi juga signifikansi relatifnya di seluruh dokumen.
+
+Tujuan dari analisis ini adalah untuk mengidentifikasi pasangan kata yang paling sering dan paling penting dalam nama-nama tempat wisata. Hal ini dapat memberikan insight tentang pola penamaan, misalnya apakah tempat wisata sering menggunakan kata seperti "Taman Wisata", "Pantai Indah", atau kombinasi umum lainnya.
+
+Visualisasi ini membantu kita memahami struktur frasa yang dominan, yang dapat digunakan dalam pengembangan model Content-Based Filtering untuk meningkatkan akurasi rekomendasi berdasarkan kemiripan nama atau kategori tempat.
+
+![image](https://github.com/user-attachments/assets/c35bf313-dc34-45a3-953b-f36fb3c81269)
+
+
+4. Visualisasi Trigram Menggunakan TF-IDF pada Nama Tempat Wisata
+   
+Setelah analisis bigram, dilakukan pula analisis terhadap trigram, yaitu kombinasi tiga kata yang muncul berurutan dalam nama tempat wisata. Seperti sebelumnya, metode TF-IDF digunakan untuk mengukur pentingnya trigram yang muncul, bukan hanya berdasarkan frekuensinya tetapi juga berdasarkan tingkat kekhususan trigram di seluruh data.
+
+Trigram dapat memberikan informasi yang lebih kontekstual dibanding unigram (satu kata) atau bigram, karena tiga kata berturut-turut cenderung membentuk frasa yang lebih bermakna atau spesifik. Misalnya, frasa seperti "Taman Wisata Alam" atau "Pantai Pasir Putih" bisa muncul sebagai trigram yang signifikan.
+
+Visualisasi ini membantu mengidentifikasi pola atau struktur umum dalam penamaan tempat wisata yang bisa dimanfaatkan lebih lanjut untuk proses ekstraksi fitur dalam sistem rekomendasi berbasis konten.
+
+![image](https://github.com/user-attachments/assets/3d936eee-d1a9-43d5-9396-e58ffc2212b1)
+
+5. Penggabungan Fitur Konten
+
+Pada tahap ini, kolom Place_Name dan Category digabung menjadi satu fitur teks (combined_features). Tanda pemisah | pada kategori diubah menjadi spasi agar lebih cocok untuk analisis teks.
+
+Fitur ini digunakan untuk membentuk representasi konten tempat wisata, yang nantinya akan diproses menggunakan TF-IDF dalam metode Content-Based Filtering.
+
+![image](https://github.com/user-attachments/assets/61b10e6d-8722-43da-87a1-1bb25c867d3d)
+
+6. Ekstraksi Fitur dengan TF-IDF
+
+TF-IDF (Term Frequency–Inverse Document Frequency) digunakan untuk mengubah data teks (combined_features) menjadi representasi numerik. Teknik ini menekankan kata-kata yang penting dan mengurangi bobot kata umum (stop words).
+
+![image](https://github.com/user-attachments/assets/46368137-d56a-4754-99e7-30e1e5ccf3a3)
+
+7. Perhitungan Cosine Similarity
+
+Cosine Similarity digunakan untuk mengukur tingkat kemiripan antar tempat wisata berdasarkan representasi vektor dari TF-IDF. Nilai kemiripan ini disusun dalam bentuk matriks, sehingga kita dapat melihat seberapa mirip satu tempat dengan tempat lainnya.
+
+Hasilnya disimpan dalam similarity_df, yang menjadi dasar untuk sistem rekomendasi berbasis konten.
+
+![image](https://github.com/user-attachments/assets/e640691f-6389-4318-94d7-5665fe61098c)
+
+8. similarity_df
+
+similarity_df adalah DataFrame yang berisi skor kemiripan (cosine similarity) antar tempat wisata. Setiap baris dan kolom mewakili satu tempat wisata, dan nilai di sel menunjukkan tingkat kemiripan antara dua tempat. Nilai berkisar dari 0 (tidak mirip) hingga 1 (sangat mirip). Data ini menjadi dasar untuk memberikan rekomendasi tempat wisata yang mirip dengan tempat yang dipilih pengguna.
+
+![image](https://github.com/user-attachments/assets/31039cad-323b-4c86-b349-34b858296148)
+
+9. Mapping Nama Tempat ke Index
+
+Kode ini membuat Series bernama indices yang berfungsi untuk memetakan nama tempat wisata ke indeks barisnya di df_tourism. Mapping ini penting untuk mengambil indeks tempat tertentu berdasarkan namanya saat melakukan pencarian rekomendasi. Fungsi drop_duplicates() digunakan agar tidak ada nama tempat yang terduplikasi.
+
+![image](https://github.com/user-attachments/assets/76903675-b555-411d-9d84-e648748b14be)
+
+10. Fungsi Rekomendasi Tempat Wisata
+
+Fungsi get_recommendations digunakan untuk memberikan rekomendasi tempat wisata yang mirip dengan nama tempat yang diberikan sebagai input. Prosesnya meliputi:
+- Mengecek apakah nama tempat ada dalam data.
+- Mengambil indeks tempat tersebut.
+- Menghitung skor kesamaan (cosine similarity) terhadap semua tempat lain.
+- Mengurutkan skor dan mengambil 10 tempat teratas yang paling mirip (selain dirinya sendiri).
+- Mengembalikan data tempat yang direkomendasikan dalam bentuk DataFrame.
+
+![image](https://github.com/user-attachments/assets/39823ceb-1b71-4e7a-8cbe-2ef47098b411)
+
+11. Contoh Penggunaan Fungsi Rekomendasi
+
+Contoh berikut menunjukkan cara memanggil fungsi get_recommendations dengan memasukkan nama tempat wisata, dalam hal ini "Museum Taman Prasasti". Fungsi akan menampilkan daftar tempat wisata lain yang memiliki kemiripan konten berdasarkan nama dan kategori menggunakan metode Content-Based Filtering (CBF).
+
+![image](https://github.com/user-attachments/assets/51c14b18-4531-4732-adb6-c698e4a9db97)
+
+
+
+### Collaborative Filtering (CF)
+
+1. Penggabungan Data untuk Collaborative Filtering
+
+Langkah ini menggabungkan tiga data utama: data rating (df_rating), data pengguna (df_user), dan data tempat wisata (df_tourism). Penggabungan dilakukan berdasarkan User_Id dan Place_Id, sehingga membentuk satu dataframe komprehensif (df) yang memuat informasi lengkap tentang siapa yang memberi rating, terhadap tempat wisata mana, dan informasi kontennya.
+
+![image](https://github.com/user-attachments/assets/9b4cb776-a9c3-41dc-bfae-e6f22addb4ae)
+
+2. Encoding ID Pengguna dan Tempat
+
+Pada tahap ini, dilakukan transformasi ID pengguna (User_Id) dan ID tempat (Place_Id) menjadi bentuk numerik menggunakan LabelEncoder. Hal ini penting agar data dapat digunakan sebagai input dalam model machine learning.
+- df['user'] dan df['place'] berisi representasi numerik dari pengguna dan tempat.
+- num_users dan num_places menyimpan jumlah unik pengguna dan tempat wisata, yang dibutuhkan untuk menentukan ukuran embedding dalam model rekomendasi.
+
+![image](https://github.com/user-attachments/assets/a8e12a97-b41b-4a9d-9cc7-436c88a03351)
+
+3. Normalisasi Rating
+
+Sebelum pelatihan model, rating dari pengguna perlu dinormalisasi agar berada dalam rentang 0 hingga 1. Ini dilakukan agar model lebih stabil dan cepat konvergen saat proses training.
+- min_rating dan max_rating: mencari nilai rating minimum dan maksimum.
+- rating_normalized: menghitung nilai rating yang telah dinormalisasi menggunakan rumus:
+
+![image](https://github.com/user-attachments/assets/ac08ce6c-e7ae-48cc-8131-5ee8ed1d12d6)
+
+4.Pembagian Data untuk Pelatihan dan Validasi
+
+Setelah data disiapkan, langkah selanjutnya adalah memisahkan fitur dan label, serta membagi data menjadi data latih dan data validasi.
+- x: berisi pasangan (user, place) sebagai input fitur.
+- y: berisi nilai rating yang telah dinormalisasi sebagai target.
+- train_test_split: membagi data menjadi 80% untuk pelatihan dan 20% untuk validasi agar model dapat dievaluasi performanya selama training.
+
+![image](https://github.com/user-attachments/assets/a58a5ee4-1b5d-4459-a1eb-57bfe41ca0b0)
+
+5. Arsitektur Model Recommender (Collaborative Filtering)
+
+Model rekomendasi ini menggunakan pendekatan Collaborative Filtering berbasis neural network, yang memetakan pengguna dan tempat wisata ke dalam vektor embedding.
+- user_embedding dan place_embedding: menghasilkan representasi vektor (embedding) untuk pengguna dan tempat.
+- user_bias dan place_bias: menambahkan bias untuk masing-masing pengguna dan tempat.
+- dot_user_place: menghitung interaksi (kemiripan) antara pengguna dan tempat dengan operasi perkalian dot product.
+
+Output dari model ini adalah prediksi skor rating yang mewakili seberapa cocok suatu tempat bagi pengguna tertentu.
+
+6. Definisi Model Rekomendasi – RecommenderNet
+
+Model RecommenderNet merupakan implementasi Collaborative Filtering berbasis neural network menggunakan TensorFlow. Model ini belajar merepresentasikan pengguna dan tempat wisata sebagai vektor dalam ruang berdimensi rendah (embedding), lalu menghitung kecocokan antar keduanya.
+
+Komponen Utama:
+- user_embedding & place_embedding: menghasilkan vektor representasi (embedding) dari pengguna dan tempat.
+- user_bias & place_bias: menyertakan nilai bias untuk setiap pengguna dan tempat.
+- dot_user_place: menghitung skor kecocokan (prediksi rating) dengan perkalian dot product antara embedding pengguna dan tempat, ditambah bias masing-masing.
+
+Output dari model ini adalah nilai prediksi rating antara pengguna dan tempat wisata.
+
+![image](https://github.com/user-attachments/assets/e777a962-483e-421c-92f4-fef267d00c89)
+
+7. Kompilasi Model Rekomendasi
+
+Setelah mendefinisikan arsitektur model RecommenderNet, langkah selanjutnya adalah melakukan kompilasi dengan konfigurasi sebagai berikut:
+- Loss Function: mean_squared_error – digunakan untuk mengukur selisih antara rating aktual dan prediksi.
+- Optimizer: Adam – algoritma optimisasi yang efisien dengan learning rate sebesar 0.001.
+- Metrics:
+  - MeanAbsoluteError – mengukur rata-rata kesalahan absolut dari prediksi.
+  - RootMeanSquaredError – mengukur akar dari rata-rata kuadrat kesalahan, berguna untuk mengevaluasi seberapa besar penyimpangan prediksi dari nilai sebenarnya.
+
+Langkah ini penting untuk menyiapkan model sebelum proses pelatihan (training) dilakukan.
+
+![image](https://github.com/user-attachments/assets/95ef75c6-c367-4898-ac20-81eb8f2617d6)
+
+8. Pelatihan Model (Model Training)
+
+Model dilatih menggunakan data pelatihan dan validasi dengan parameter berikut:
+- Batch Size: 64 – jumlah sampel yang diproses sebelum model diperbarui.
+- Epochs: 100 – jumlah maksimum iterasi pelatihan.
+- Validation Data: digunakan untuk mengevaluasi performa model pada data yang tidak dilatih.
+- Early Stopping: menghentikan pelatihan lebih awal jika val_loss tidak membaik selama 7 epoch berturut-turut, serta mengembalikan bobot model terbaik (dengan restore_best_weights=True).
+
+Callback EarlyStopping membantu mencegah overfitting dan mempercepat pelatihan dengan menghentikan proses saat model tidak lagi mengalami peningkatan.
+
+![image](https://github.com/user-attachments/assets/cb1d1359-824b-4e5c-8426-649ef92a4a59)
+
+9. Menentukan Tempat yang Belum Dikunjungi oleh Pengguna
+
+- user_ID: Mengambil satu user secara acak dari data.
+- places_visited: Menyimpan daftar place yang sudah dikunjungi oleh user tersebut.
+- places_not_visited: Menyimpan daftar tempat yang belum pernah dikunjungi oleh user, dengan membandingkan semua tempat (all_places) terhadap tempat yang telah dikunjungi (places_visited).
+
+Langkah ini penting untuk membuat rekomendasi hanya pada tempat-tempat baru bagi pengguna.
+
+![image](https://github.com/user-attachments/assets/43d998ed-cac0-4902-b6bd-721d8b01a9b9)
+
+10. Rekomendasi Tempat Wisata Berdasarkan Collaborative Filtering
+
+1. Cek apakah semua tempat sudah dikunjungi
+- Jika places_not_visited kosong, berarti pengguna telah mengunjungi semua tempat wisata.
+2. Prediksi rating tempat yang belum dikunjungi
+- Membentuk array kombinasi user–place (user_place_array).
+- Model memprediksi rating untuk masing-masing tempat.
+3. Skala ulang prediksi ke rentang rating asli
+- Mengembalikan hasil prediksi ke skala awal (misal 1–5).
+4. Ambil 10 tempat teratas
+- Urutkan berdasarkan skor prediksi tertinggi.
+5. Dekode ID user dan tempat ke bentuk aslinya
+- Gunakan LabelEncoder.inverse_transform() untuk menampilkan hasil akhir dalam format yang dimengerti.
+6. Tampilkan hasil rekomendasi
+- Menampilkan nama tempat dan rating prediksi untuk user yang dipilih secara acak.
+
+![image](https://github.com/user-attachments/assets/0f7edcbe-dd81-4849-b165-2c4efcf24ac6)
+
+![image](https://github.com/user-attachments/assets/4d7f327d-4cc1-4f08-a832-4af56f39d8d0)
 
 
 
