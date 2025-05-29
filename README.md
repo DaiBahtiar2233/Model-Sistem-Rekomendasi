@@ -256,7 +256,34 @@ Bagian ini menampilkan informasi terkait lokasi pengguna, kategori tempat wisata
 - Memberikan wawasan terkait ketidakseimbangan data, seperti lokasi atau kota yang lebih dominan, yang bisa mempengaruhi cara sistem rekomendasi bekerja.
 
 
+#### 11. Visualisasi Distribusi Kategori Tempat Wisata
+
+Langkah awal dalam Content-Based Filtering adalah memahami karakteristik dari data tempat wisata. Salah satu informasi penting yang dapat dianalisis adalah kategori dari masing-masing destinasi wisata. Visualisasi ini bertujuan untuk melihat sebaran jumlah tempat wisata berdasarkan kategori seperti budaya, alam, sejarah, dan sebagainya.
+
+![image](https://github.com/user-attachments/assets/36e9013f-d047-4549-b98e-512aec6928ad)
+
+![image](https://github.com/user-attachments/assets/8bd88d55-9dad-42cd-8dac-10b01f4bf3c1)
+
+Dengan menggunakan grafik batang, kita dapat dengan mudah mengidentifikasi kategori yang paling dominan maupun yang jarang muncul dalam dataset. Informasi ini juga bermanfaat untuk memahami potensi kesamaan antar tempat dalam proses rekomendasi berbasis konten nantinya.
+
+
+#### 12. Analisis Part-of-Speech (POS) pada Nama Tempat Wisata
+
+Untuk mendalami lebih jauh karakteristik dari nama tempat wisata, dilakukan analisis Part-of-Speech (POS) menggunakan pustaka TextBlob. POS Tagging bertujuan untuk mengidentifikasi jenis kata seperti kata benda (noun), kata sifat (adjective), kata kerja (verb), dan lainnya dari kumpulan nama tempat.
+
+![image](https://github.com/user-attachments/assets/1412b0ea-335e-41ec-978f-29f7e5926648)
+
+
+Dengan menggabungkan semua nama tempat menjadi satu teks, kita dapat menganalisis frekuensi masing-masing jenis kata yang muncul. Visualisasi ini akan memberikan gambaran mengenai struktur umum penamaan tempat wisata, misalnya apakah lebih banyak menggunakan kata benda atau kata sifat.
+
+![image](https://github.com/user-attachments/assets/02d376f0-68fb-49a7-83fd-fc05e5b8a515)
+
+
+Informasi POS ini juga bisa memberikan insight tambahan jika ingin mengembangkan model rekomendasi yang mempertimbangkan karakter linguistik dari nama tempat.
+
+
 ## 4. Data Preparation
+Pada tahap ini, dilakukan berbagai proses persiapan data yang mencakup pembersihan kolom, penanganan missing value, deteksi dan penghapusan outlier, pembuatan fitur, encoding ID, dan normalisasi rating. Semua langkah ini bertujuan untuk memastikan bahwa data siap digunakan dalam proses pemodelan sistem rekomendasi, baik dengan pendekatan Content-Based Filtering maupun Collaborative Filtering.
 
 #### 1. Pembersihan Kolom Tidak Relevan
 
@@ -279,8 +306,8 @@ Untuk memastikan kualitas data, dilakukan pemeriksaan dan penghapusan nilai koso
 ![image](https://github.com/user-attachments/assets/32aae3a5-7284-4e96-bbf6-15dd7330837e)
 
 
-#### 3. penghapusan data duplikat
-Pada tahap awal preprocessing, dilakukan penghapusan data yang bersifat duplikat pada seluruh dataframe yang digunakan, yaitu: df_user, df_rating, `dfdf_tourism, dan df_package. Kebera
+#### 3. Penghapusan Data Duplikat
+Pada tahap awal preprocessing, dilakukan penghapusan data yang bersifat duplikat pada seluruh dataframe yang digunakan, yaitu: df_user, df_rating, df_tourism, dan df_package.
 
 Langkah ini memastikan bahwa setiap entri dalam dataset bersifat unik dan valid sebelum dilakukan proses lebih lanjut seperti penanganan nilai yang hilang atau pengkodean data.
 
@@ -290,39 +317,139 @@ Langkah ini memastikan bahwa setiap entri dalam dataset bersifat unik dan valid 
 
 #### 4. Deteksi Outlier Menggunakan Boxpl
 
-Untuk mengidentifikasi adanya outlier dalam data numerik, dilakukan visualisasi boxplot pada masing-masing dataframe: df_package, `df_ratindf_rating, `df_pariwisata_df_tourism, dan df_user.
+Untuk mengidentifikasi adanya outlier dalam data numerik, dilakukan visualisasi boxplot pada masing-masing dataframe: df_package, df_rating, df_tourism, dan df_user.
 
 Langkah ini penting dilakukan sebelum melakukan normalisasi atau proses machine learning lainnya, karena outlier dapat mempengaruhi performa model secara signifikan. Dengan visualisasi ini, pengguna dapat dengan mudah mengamati distribusi data dan menentukan perlakuan selanjutnya terhadap outlier
 
+![image](https://github.com/user-attachments/assets/aa7abf02-b07b-44bb-89b5-7abffaa56a0d)
 
-#### 5. 
+![image](https://github.com/user-attachments/assets/aa6d53ae-d3a6-4c25-9eb9-cbb380ee5e14)
 
-#### 6. 
+![image](https://github.com/user-attachments/assets/38787f6d-7153-4a75-9f9d-8046d5edc0d1)
 
-#### 7. 
+![image](https://github.com/user-attachments/assets/cf5b2682-99ea-46a1-8146-1087e509fdca)
 
-#### 8. 
-
-
-#### 9. 
+![image](https://github.com/user-attachments/assets/f935d9e5-74a1-4bbf-99f5-49e5cc822897)
 
 
-#### 10. 
+#### 5. Menghapus Outlier Menggunakan Metode IQR
+Pada bagian ini, dilakukan pembersihan data dari nilai-nilai ekstrem (outlier) menggunakan metode Interquartile Range (IQR). Outlier dapat mempengaruhi hasil analisis dan performa model. Oleh karena itu, penting untuk menghapusnya.
+
+![image](https://github.com/user-attachments/assets/3013f003-3d9f-4005-93bb-326ca764bdb0)
+
+![image](https://github.com/user-attachments/assets/b001f192-bdb3-4737-acca-b86b617913cf)
+
+![image](https://github.com/user-attachments/assets/9e04d4cf-a1f4-4a33-a100-fe47054b9858)
+
+
+Fungsi remove_outliers_iqr digunakan untuk memfilter data berdasarkan nilai Q1 (kuartil bawah) dan Q3 (kuartil atas), dengan batas toleransi sebesar 1.5 * IQR. Fungsi ini diterapkan ke seluruh kolom numerik dari beberapa dataset, seperti df_user, df_rating, df_tourism, dan df_package. Sebelum dan sesudah proses, ukuran dataset dibandingkan untuk mengetahui seberapa banyak data yang terdeteksi sebagai outlier dan dihapus.
+
+
+#### 6. Visualisasi Boxplot setelah Penghapusan Outlier
+Pada tahap ini, dilakukan visualisasi menggunakan boxplot untuk masing-masing dataset (User, Rating, Tourism, dan Package). Boxplot digunakan untuk:
+- Melihat distribusi data numerik
+- Mengidentifikasi outlier secara visual
+- Memahami sebaran dan variasi data
+
+![image](https://github.com/user-attachments/assets/ee36973d-1d8b-4dde-928b-4b36d18ef086)
+
+![image](https://github.com/user-attachments/assets/6323fdb9-db11-4004-9989-20d9263158c5)
+
+![image](https://github.com/user-attachments/assets/f170a31c-97d2-44e6-b4f8-a896a78a40fa)
+
+![image](https://github.com/user-attachments/assets/da25e3b9-61af-4771-9d32-d34416c53717)
+
+![image](https://github.com/user-attachments/assets/e7546af4-16e3-42a9-b2a5-e5c6a6b7a2a7)
+
+Setiap grafik menampilkan kolom-kolom numerik dari masing-masing DataFrame. Proses ini membantu dalam validasi apakah metode penghapusan outlier sebelumnya telah bekerja secara efektif.
+
+#### 7. Penggabungan Fitur Konten
+
+Pada tahap ini, kolom Place_Name dan Category digabung menjadi satu fitur teks (combined_features). Tanda pemisah | pada kategori diubah menjadi spasi agar lebih cocok untuk analisis teks.
+
+Fitur ini digunakan untuk membentuk representasi konten tempat wisata, yang nantinya akan diproses menggunakan TF-IDF dalam metode Content-Based Filtering.
+
+![image](https://github.com/user-attachments/assets/2d709306-d063-4007-b080-cebbe2f25a65)
+
+
+#### 8. Ekstraksi Fitur dengan TF-IDF
+
+TF-IDF (Term Frequency–Inverse Document Frequency) digunakan untuk mengubah data teks (combined_features) menjadi representasi numerik. Teknik ini menekankan kata-kata yang penting dan mengurangi bobot kata umum (stop words).
+
+![image](https://github.com/user-attachments/assets/1c534dc1-e8c9-4abb-837c-5b3909ec5e15)
+
+
+#### 9. Penggabungan Data untuk Collaborative Filtering
+
+![image](https://github.com/user-attachments/assets/06c1ad98-95fd-419f-9bc6-b5ff69b13e2a)
+
+Langkah ini menggabungkan tiga data utama: data rating (df_rating), data pengguna (df_user), dan data tempat wisata (df_tourism). Penggabungan dilakukan berdasarkan User_Id dan Place_Id, sehingga membentuk satu dataframe komprehensif (df) yang memuat informasi lengkap tentang siapa yang memberi rating, terhadap tempat wisata mana, dan informasi kontennya.
+
+
+#### 10. Encoding ID Pengguna dan Tempat
+
+![image](https://github.com/user-attachments/assets/002da12e-bf3d-40c4-b44d-2ff671113e22)
+
+
+Pada tahap ini, dilakukan transformasi ID pengguna (User_Id) dan ID tempat (Place_Id) menjadi bentuk numerik menggunakan LabelEncoder. Hal ini penting agar data dapat digunakan sebagai input dalam model machine learning.
+- df['user'] dan df['place'] berisi representasi numerik dari pengguna dan tempat.
+- num_users dan num_places menyimpan jumlah unik pengguna dan tempat wisata, yang dibutuhkan untuk menentukan ukuran embedding dalam model rekomendasi.
+
+
+#### 11. Normalisasi Rating
+
+![image](https://github.com/user-attachments/assets/d9382fe9-eca7-4987-8f61-e18ba822dea5)
+
+Sebelum pelatihan model, rating dari pengguna perlu dinormalisasi agar berada dalam rentang 0 hingga 1. Ini dilakukan agar model lebih stabil dan cepat konvergen saat proses training.
+- min_rating dan max_rating: mencari nilai rating minimum dan maksimum.
+- rating_normalized: menghitung nilai rating yang telah dinormalisasi menggunakan rumus:
 
 
 
+#### 12. Pembagian Data untuk Pelatihan dan Validasi
+Setelah data disiapkan, langkah selanjutnya adalah memisahkan fitur dan label, serta membagi data menjadi data latih dan data validasi.
+- x: berisi pasangan (user, place) sebagai input fitur.
+- y: berisi nilai rating yang telah dinormalisasi sebagai target.
+- train_test_split: membagi data menjadi 80% untuk pelatihan dan 20% untuk validasi agar model dapat dievaluasi performanya selama training.
+
+![image](https://github.com/user-attachments/assets/ed1d1b1e-b8e0-479f-8ceb-8d866a125bfa)
+
+
+#### 13. Visualisasi Bigram Menggunakan TF-IDF pada Nama Tempat Wisata
+   
+Pada bagian ini, dilakukan analisis terhadap bigram, yaitu kombinasi dua kata yang muncul secara berurutan dalam nama tempat wisata. Untuk menghitung bobot kemunculan bigram, digunakan pendekatan TF-IDF (Term Frequency-Inverse Document Frequency) yang tidak hanya mempertimbangkan frekuensi kata, tetapi juga signifikansi relatifnya di seluruh dokumen.
+
+Tujuan dari analisis ini adalah untuk mengidentifikasi pasangan kata yang paling sering dan paling penting dalam nama-nama tempat wisata. Hal ini dapat memberikan insight tentang pola penamaan, misalnya apakah tempat wisata sering menggunakan kata seperti "Taman Wisata", "Pantai Indah", atau kombinasi umum lainnya.
+
+Visualisasi ini membantu kita memahami struktur frasa yang dominan, yang dapat digunakan dalam pengembangan model Content-Based Filtering untuk meningkatkan akurasi rekomendasi berdasarkan kemiripan nama atau kategori tempat.
+
+![image](https://github.com/user-attachments/assets/c35bf313-dc34-45a3-953b-f36fb3c81269)
+
+
+#### 14. Visualisasi Trigram Menggunakan TF-IDF pada Nama Tempat Wisata
+   
+Setelah analisis bigram, dilakukan pula analisis terhadap trigram, yaitu kombinasi tiga kata yang muncul berurutan dalam nama tempat wisata. Seperti sebelumnya, metode TF-IDF digunakan untuk mengukur pentingnya trigram yang muncul, bukan hanya berdasarkan frekuensinya tetapi juga berdasarkan tingkat kekhususan trigram di seluruh data.
+
+Trigram dapat memberikan informasi yang lebih kontekstual dibanding unigram (satu kata) atau bigram, karena tiga kata berturut-turut cenderung membentuk frasa yang lebih bermakna atau spesifik. Misalnya, frasa seperti "Taman Wisata Alam" atau "Pantai Pasir Putih" bisa muncul sebagai trigram yang signifikan.
+
+Visualisasi ini membantu mengidentifikasi pola atau struktur umum dalam penamaan tempat wisata yang bisa dimanfaatkan lebih lanjut untuk proses ekstraksi fitur dalam sistem rekomendasi berbasis konten.
+
+![image](https://github.com/user-attachments/assets/3d936eee-d1a9-43d5-9396-e58ffc2212b1)
 
 
 
+#### 15. Mapping Nama Tempat ke Index
+
+Kode ini membuat Series bernama indices yang berfungsi untuk memetakan nama tempat wisata ke indeks barisnya di df_tourism. Mapping ini penting untuk mengambil indeks tempat tertentu berdasarkan namanya saat melakukan pencarian rekomendasi. Fungsi drop_duplicates() digunakan agar tidak ada nama tempat yang terduplikasi.
+
+![image](https://github.com/user-attachments/assets/76903675-b555-411d-9d84-e648748b14be)
 
 
+#### 16. Penggabungan Data untuk Collaborative Filtering
 
+Langkah ini menggabungkan tiga data utama: data rating (df_rating), data pengguna (df_user), dan data tempat wisata (df_tourism). Penggabungan dilakukan berdasarkan User_Id dan Place_Id, sehingga membentuk satu dataframe komprehensif (df) yang memuat informasi lengkap tentang siapa yang memberi rating, terhadap tempat wisata mana, dan informasi kontennya.
 
-
-
-
-
-
+![image](https://github.com/user-attachments/assets/9b4cb776-a9c3-41dc-bfae-e6f22addb4ae)
 
 
 
@@ -353,62 +480,7 @@ Kelebihan dari pendekatan ini:
 
 ### Content-Based Filtering (CBF)
 
-#### 1. Visualisasi Distribusi Kategori Tempat Wisata
-
-Langkah awal dalam Content-Based Filtering adalah memahami karakteristik dari data tempat wisata. Salah satu informasi penting yang dapat dianalisis adalah kategori dari masing-masing destinasi wisata. Visualisasi ini bertujuan untuk melihat sebaran jumlah tempat wisata berdasarkan kategori seperti budaya, alam, sejarah, dan sebagainya.
-
-Dengan menggunakan grafik batang, kita dapat dengan mudah mengidentifikasi kategori yang paling dominan maupun yang jarang muncul dalam dataset. Informasi ini juga bermanfaat untuk memahami potensi kesamaan antar tempat dalam proses rekomendasi berbasis konten nantinya.
-
-![image](https://github.com/user-attachments/assets/994e1ae5-688b-4656-93a6-2f64ac66b6c4)
-
-
-#### 2. Analisis Part-of-Speech (POS) pada Nama Tempat Wisata
-
-Untuk mendalami lebih jauh karakteristik dari nama tempat wisata, dilakukan analisis Part-of-Speech (POS) menggunakan pustaka TextBlob. POS Tagging bertujuan untuk mengidentifikasi jenis kata seperti kata benda (noun), kata sifat (adjective), kata kerja (verb), dan lainnya dari kumpulan nama tempat.
-
-Dengan menggabungkan semua nama tempat menjadi satu teks, kita dapat menganalisis frekuensi masing-masing jenis kata yang muncul. Visualisasi ini akan memberikan gambaran mengenai struktur umum penamaan tempat wisata, misalnya apakah lebih banyak menggunakan kata benda atau kata sifat.
-
-Informasi POS ini juga bisa memberikan insight tambahan jika ingin mengembangkan model rekomendasi yang mempertimbangkan karakter linguistik dari nama tempat.
-
-![image](https://github.com/user-attachments/assets/2387cf92-6aed-4a1f-b3f1-41b38f883d9e)
-
-
-#### 3. Visualisasi Bigram Menggunakan TF-IDF pada Nama Tempat Wisata
-   
-Pada bagian ini, dilakukan analisis terhadap bigram, yaitu kombinasi dua kata yang muncul secara berurutan dalam nama tempat wisata. Untuk menghitung bobot kemunculan bigram, digunakan pendekatan TF-IDF (Term Frequency-Inverse Document Frequency) yang tidak hanya mempertimbangkan frekuensi kata, tetapi juga signifikansi relatifnya di seluruh dokumen.
-
-Tujuan dari analisis ini adalah untuk mengidentifikasi pasangan kata yang paling sering dan paling penting dalam nama-nama tempat wisata. Hal ini dapat memberikan insight tentang pola penamaan, misalnya apakah tempat wisata sering menggunakan kata seperti "Taman Wisata", "Pantai Indah", atau kombinasi umum lainnya.
-
-Visualisasi ini membantu kita memahami struktur frasa yang dominan, yang dapat digunakan dalam pengembangan model Content-Based Filtering untuk meningkatkan akurasi rekomendasi berdasarkan kemiripan nama atau kategori tempat.
-
-![image](https://github.com/user-attachments/assets/c35bf313-dc34-45a3-953b-f36fb3c81269)
-
-
-#### 4. Visualisasi Trigram Menggunakan TF-IDF pada Nama Tempat Wisata
-   
-Setelah analisis bigram, dilakukan pula analisis terhadap trigram, yaitu kombinasi tiga kata yang muncul berurutan dalam nama tempat wisata. Seperti sebelumnya, metode TF-IDF digunakan untuk mengukur pentingnya trigram yang muncul, bukan hanya berdasarkan frekuensinya tetapi juga berdasarkan tingkat kekhususan trigram di seluruh data.
-
-Trigram dapat memberikan informasi yang lebih kontekstual dibanding unigram (satu kata) atau bigram, karena tiga kata berturut-turut cenderung membentuk frasa yang lebih bermakna atau spesifik. Misalnya, frasa seperti "Taman Wisata Alam" atau "Pantai Pasir Putih" bisa muncul sebagai trigram yang signifikan.
-
-Visualisasi ini membantu mengidentifikasi pola atau struktur umum dalam penamaan tempat wisata yang bisa dimanfaatkan lebih lanjut untuk proses ekstraksi fitur dalam sistem rekomendasi berbasis konten.
-
-![image](https://github.com/user-attachments/assets/3d936eee-d1a9-43d5-9396-e58ffc2212b1)
-
-#### 5. Penggabungan Fitur Konten
-
-Pada tahap ini, kolom Place_Name dan Category digabung menjadi satu fitur teks (combined_features). Tanda pemisah | pada kategori diubah menjadi spasi agar lebih cocok untuk analisis teks.
-
-Fitur ini digunakan untuk membentuk representasi konten tempat wisata, yang nantinya akan diproses menggunakan TF-IDF dalam metode Content-Based Filtering.
-
-![image](https://github.com/user-attachments/assets/61b10e6d-8722-43da-87a1-1bb25c867d3d)
-
-#### 6. Ekstraksi Fitur dengan TF-IDF
-
-TF-IDF (Term Frequency–Inverse Document Frequency) digunakan untuk mengubah data teks (combined_features) menjadi representasi numerik. Teknik ini menekankan kata-kata yang penting dan mengurangi bobot kata umum (stop words).
-
-![image](https://github.com/user-attachments/assets/46368137-d56a-4754-99e7-30e1e5ccf3a3)
-
-#### 7. Perhitungan Cosine Similarity
+#### 1. Perhitungan Cosine Similarity
 
 Cosine Similarity digunakan untuk mengukur tingkat kemiripan antar tempat wisata berdasarkan representasi vektor dari TF-IDF. Nilai kemiripan ini disusun dalam bentuk matriks, sehingga kita dapat melihat seberapa mirip satu tempat dengan tempat lainnya.
 
@@ -416,19 +488,13 @@ Hasilnya disimpan dalam similarity_df, yang menjadi dasar untuk sistem rekomenda
 
 ![image](https://github.com/user-attachments/assets/e640691f-6389-4318-94d7-5665fe61098c)
 
-#### 8. similarity_df
+#### 2. similarity_df
 
 similarity_df adalah DataFrame yang berisi skor kemiripan (cosine similarity) antar tempat wisata. Setiap baris dan kolom mewakili satu tempat wisata, dan nilai di sel menunjukkan tingkat kemiripan antara dua tempat. Nilai berkisar dari 0 (tidak mirip) hingga 1 (sangat mirip). Data ini menjadi dasar untuk memberikan rekomendasi tempat wisata yang mirip dengan tempat yang dipilih pengguna.
 
 ![image](https://github.com/user-attachments/assets/31039cad-323b-4c86-b349-34b858296148)
 
-#### 9. Mapping Nama Tempat ke Index
-
-Kode ini membuat Series bernama indices yang berfungsi untuk memetakan nama tempat wisata ke indeks barisnya di df_tourism. Mapping ini penting untuk mengambil indeks tempat tertentu berdasarkan namanya saat melakukan pencarian rekomendasi. Fungsi drop_duplicates() digunakan agar tidak ada nama tempat yang terduplikasi.
-
-![image](https://github.com/user-attachments/assets/76903675-b555-411d-9d84-e648748b14be)
-
-#### 10. Fungsi Rekomendasi Tempat Wisata
+#### 3. Fungsi Rekomendasi Tempat Wisata
 
 Fungsi get_recommendations digunakan untuk memberikan rekomendasi tempat wisata yang mirip dengan nama tempat yang diberikan sebagai input. Prosesnya meliputi:
 - Mengecek apakah nama tempat ada dalam data.
@@ -439,7 +505,7 @@ Fungsi get_recommendations digunakan untuk memberikan rekomendasi tempat wisata 
 
 ![image](https://github.com/user-attachments/assets/39823ceb-1b71-4e7a-8cbe-2ef47098b411)
 
-#### 11. Contoh Penggunaan Fungsi Rekomendasi
+#### 4. Contoh Penggunaan Fungsi Rekomendasi
 
 Contoh berikut menunjukkan cara memanggil fungsi get_recommendations dengan memasukkan nama tempat wisata, dalam hal ini "Museum Taman Prasasti". Fungsi akan menampilkan daftar tempat wisata lain yang memiliki kemiripan konten berdasarkan nama dan kategori menggunakan metode Content-Based Filtering (CBF).
 
@@ -449,47 +515,20 @@ Contoh berikut menunjukkan cara memanggil fungsi get_recommendations dengan mema
 
 ### Collaborative Filtering (CF)
 
-#### 1. Penggabungan Data untuk Collaborative Filtering
 
-Langkah ini menggabungkan tiga data utama: data rating (df_rating), data pengguna (df_user), dan data tempat wisata (df_tourism). Penggabungan dilakukan berdasarkan User_Id dan Place_Id, sehingga membentuk satu dataframe komprehensif (df) yang memuat informasi lengkap tentang siapa yang memberi rating, terhadap tempat wisata mana, dan informasi kontennya.
-
-![image](https://github.com/user-attachments/assets/9b4cb776-a9c3-41dc-bfae-e6f22addb4ae)
-
-#### 2. Encoding ID Pengguna dan Tempat
-
-Pada tahap ini, dilakukan transformasi ID pengguna (User_Id) dan ID tempat (Place_Id) menjadi bentuk numerik menggunakan LabelEncoder. Hal ini penting agar data dapat digunakan sebagai input dalam model machine learning.
-- df['user'] dan df['place'] berisi representasi numerik dari pengguna dan tempat.
-- num_users dan num_places menyimpan jumlah unik pengguna dan tempat wisata, yang dibutuhkan untuk menentukan ukuran embedding dalam model rekomendasi.
-
-![image](https://github.com/user-attachments/assets/a8e12a97-b41b-4a9d-9cc7-436c88a03351)
-
-#### 3. Normalisasi Rating
-
-Sebelum pelatihan model, rating dari pengguna perlu dinormalisasi agar berada dalam rentang 0 hingga 1. Ini dilakukan agar model lebih stabil dan cepat konvergen saat proses training.
-- min_rating dan max_rating: mencari nilai rating minimum dan maksimum.
-- rating_normalized: menghitung nilai rating yang telah dinormalisasi menggunakan rumus:
-
-![image](https://github.com/user-attachments/assets/ac08ce6c-e7ae-48cc-8131-5ee8ed1d12d6)
-
-#### 4.Pembagian Data untuk Pelatihan dan Validasi
-
-Setelah data disiapkan, langkah selanjutnya adalah memisahkan fitur dan label, serta membagi data menjadi data latih dan data validasi.
-- x: berisi pasangan (user, place) sebagai input fitur.
-- y: berisi nilai rating yang telah dinormalisasi sebagai target.
-- train_test_split: membagi data menjadi 80% untuk pelatihan dan 20% untuk validasi agar model dapat dievaluasi performanya selama training.
-
-![image](https://github.com/user-attachments/assets/a58a5ee4-1b5d-4459-a1eb-57bfe41ca0b0)
-
-#### 5. Arsitektur Model Recommender (Collaborative Filtering)
+#### 1. Arsitektur Model Recommender (Collaborative Filtering)
 
 Model rekomendasi ini menggunakan pendekatan Collaborative Filtering berbasis neural network, yang memetakan pengguna dan tempat wisata ke dalam vektor embedding.
 - user_embedding dan place_embedding: menghasilkan representasi vektor (embedding) untuk pengguna dan tempat.
 - user_bias dan place_bias: menambahkan bias untuk masing-masing pengguna dan tempat.
 - dot_user_place: menghitung interaksi (kemiripan) antara pengguna dan tempat dengan operasi perkalian dot product.
 
+![image](https://github.com/user-attachments/assets/9a4d5191-0382-4918-b459-aad951209ec7)
+
+
 Output dari model ini adalah prediksi skor rating yang mewakili seberapa cocok suatu tempat bagi pengguna tertentu.
 
-#### 6. Definisi Model Rekomendasi – RecommenderNet
+#### 2. Definisi Model Rekomendasi – RecommenderNet
 
 Model RecommenderNet merupakan implementasi Collaborative Filtering berbasis neural network menggunakan TensorFlow. Model ini belajar merepresentasikan pengguna dan tempat wisata sebagai vektor dalam ruang berdimensi rendah (embedding), lalu menghitung kecocokan antar keduanya.
 
@@ -502,7 +541,7 @@ Output dari model ini adalah nilai prediksi rating antara pengguna dan tempat wi
 
 ![image](https://github.com/user-attachments/assets/e777a962-483e-421c-92f4-fef267d00c89)
 
-#### 7. Kompilasi Model Rekomendasi
+#### 3. Kompilasi Model Rekomendasi
 
 Setelah mendefinisikan arsitektur model RecommenderNet, langkah selanjutnya adalah melakukan kompilasi dengan konfigurasi sebagai berikut:
 - Loss Function: mean_squared_error – digunakan untuk mengukur selisih antara rating aktual dan prediksi.
@@ -515,7 +554,7 @@ Langkah ini penting untuk menyiapkan model sebelum proses pelatihan (training) d
 
 ![image](https://github.com/user-attachments/assets/95ef75c6-c367-4898-ac20-81eb8f2617d6)
 
-#### 8. Pelatihan Model (Model Training)
+#### 4. Pelatihan Model (Model Training)
 
 Model dilatih menggunakan data pelatihan dan validasi dengan parameter berikut:
 - Batch Size: 64 – jumlah sampel yang diproses sebelum model diperbarui.
@@ -527,7 +566,7 @@ Callback EarlyStopping membantu mencegah overfitting dan mempercepat pelatihan d
 
 ![image](https://github.com/user-attachments/assets/cb1d1359-824b-4e5c-8426-649ef92a4a59)
 
-#### 9. Menentukan Tempat yang Belum Dikunjungi oleh Pengguna
+#### 5. Menentukan Tempat yang Belum Dikunjungi oleh Pengguna
 
 - user_ID: Mengambil satu user secara acak dari data.
 - places_visited: Menyimpan daftar place yang sudah dikunjungi oleh user tersebut.
@@ -537,7 +576,7 @@ Langkah ini penting untuk membuat rekomendasi hanya pada tempat-tempat baru bagi
 
 ![image](https://github.com/user-attachments/assets/43d998ed-cac0-4902-b6bd-721d8b01a9b9)
 
-#### 10. Rekomendasi Tempat Wisata Berdasarkan Collaborative Filtering
+#### 6. Rekomendasi Tempat Wisata Berdasarkan Collaborative Filtering
 
 1. Cek apakah semua tempat sudah dikunjungi
 - Jika places_not_visited kosong, berarti pengguna telah mengunjungi semua tempat wisata.
@@ -562,9 +601,8 @@ Langkah ini penting untuk membuat rekomendasi hanya pada tempat-tempat baru bagi
 
 Evaluasi sistem rekomendasi bertujuan untuk mengukur seberapa baik model dalam menyarankan tempat wisata yang relevan dan sesuai preferensi pengguna. Dalam proyek ini, dilakukan dua pendekatan utama dalam pembuatan sistem rekomendasi, yaitu:
 
-1. Content-Based Filtering (CBF)
-
-2. Collaborative Filtering (CF) berbasis neural network menggunakan TensorFlow
+### 1. Content-Based Filtering (CBF)
+### 2. Collaborative Filtering (CF) berbasis neural network menggunakan TensorFlow
 
 Masing-masing pendekatan dievaluasi dengan metrik yang sesuai untuk menilai akurasi dan relevansi rekomendasi yang dihasilkan.
 
@@ -576,7 +614,7 @@ Content-Based Filtering menggunakan fitur konten (seperti nama tempat dan katego
 
 Untuk mengevaluasi performa CBF, digunakan metrik Precision@10, yaitu rasio jumlah tempat yang relevan (dengan kategori sama seperti tempat asal) terhadap jumlah total rekomendasi (10 tempat).
 
-1. Menentukan Tempat Uji Coba untuk Evaluasi Content-Based Filtering
+#### 1. Menentukan Tempat Uji Coba untuk Evaluasi Content-Based Filtering
 
 Dalam proses evaluasi sistem rekomendasi berbasis konten (Content-Based Filtering), langkah awal yang dilakukan adalah memilih sebuah tempat wisata sebagai titik acuan atau tempat uji coba. Pada tahap ini, tempat yang dipilih adalah Museum Taman Prasasti. Pemilihan tempat ini bukan tanpa alasan—Museum Taman Prasasti memiliki karakteristik kategori yang cukup spesifik, yaitu budaya, sehingga cocok untuk menguji kemampuan model dalam menemukan tempat wisata lain yang memiliki kesamaan konten.
 
@@ -586,7 +624,7 @@ Langkah ini menjadi fondasi penting sebelum menghitung metrik seperti Precision@
 
 ![image](https://github.com/user-attachments/assets/02bad6e7-6a71-4bb1-b90b-1ad5a100c728)
 
-2. Menyusun Ulang Fungsi Rekomendasi untuk Evaluasi
+#### 2. Menyusun Ulang Fungsi Rekomendasi untuk Evaluasi
 
 Pada tahap evaluasi sistem rekomendasi berbasis konten, fungsi rekomendasi disusun ulang agar lebih fleksibel dan siap digunakan dalam berbagai skenario uji. Fungsi ini dinamai get_recommendations, dan dilengkapi dengan parameter tambahan top_n untuk menentukan jumlah hasil rekomendasi yang diinginkan—default-nya adalah 10.
 
@@ -599,7 +637,7 @@ Fungsi kemudian mengembalikan informasi dasar dari tempat-tempat hasil rekomenda
 ![image](https://github.com/user-attachments/assets/fe72bc94-ad43-4ecb-8e15-b019d8b2ebda)
 
 
-3.Menjalankan Rekomendasi CBF untuk Evaluasi
+#### 3. Menjalankan Rekomendasi CBF untuk Evaluasi
 
 Setelah fungsi rekomendasi disusun ulang, langkah selanjutnya adalah menjalankan fungsi tersebut untuk menghasilkan daftar tempat wisata yang direkomendasikan. Dalam konteks ini, digunakan place_name tertentu—yaitu Museum Taman Prasasti—sebagai titik awal rekomendasi. Parameter top_n diset ke 10, sehingga model akan mengembalikan 10 tempat yang paling mirip berdasarkan perhitungan kemiripan konten.
 
@@ -609,7 +647,7 @@ Langkah ini menjadi inti dari proses evaluasi karena dari hasil inilah kita bisa
 
 ![image](https://github.com/user-attachments/assets/c7ecdeee-1986-4912-8116-3014a3412cad)
 
-4. Mengukur Kualitas Rekomendasi dengan Precision@10
+#### 4. Mengukur Kualitas Rekomendasi dengan Precision@10
 
 Setelah mendapatkan daftar 10 tempat wisata hasil rekomendasi dari model Content-Based Filtering, langkah berikutnya adalah menghitung metrik evaluasi untuk mengukur relevansi hasil tersebut. Dalam hal ini, metrik yang digunakan adalah Precision@10, yaitu rasio jumlah tempat yang memiliki kategori sama dengan tempat asal terhadap total jumlah rekomendasi yang diberikan.
 
@@ -631,39 +669,35 @@ Namun, penting untuk dicatat bahwa evaluasi hanya dilakukan pada satu contoh uji
 Secara keseluruhan, model CBF menunjukkan performa yang akurat dan relevan untuk memberikan rekomendasi berdasarkan kemiripan konten, terutama ketika informasi kategori cukup informatif dan representatif.
 
 
-2) Evaluasi Collaborative Filtering (CF) Berbasis Neural Network
+### 2) Evaluasi Collaborative Filtering (CF) Berbasis Neural Network
+   
 Pendekatan Collaborative Filtering (CF) berbasis neural network digunakan untuk memprediksi rating atau preferensi pengguna terhadap tempat wisata, berdasarkan pola interaksi pengguna sebelumnya. Berbeda dengan Content-Based Filtering yang menggunakan informasi konten tempat wisata, pendekatan ini murni mengandalkan interaksi historis antar pengguna dan item.
 
 Dalam proyek ini, CF diimplementasikan menggunakan TensorFlow, dan model dilatih untuk mempelajari representasi laten (latent factors) dari pengguna dan tempat wisata dalam bentuk vektor embedding. Proses pelatihan dilakukan menggunakan data rating yang dibagi menjadi data pelatihan dan validasi.
 
 Metode Evaluasi: MAE dan RMSE
 Untuk mengevaluasi performa model CF, digunakan dua metrik regresi yang umum digunakan dalam sistem rekomendasi:
-1. MAE (Mean Absolute Error): Mengukur rata-rata selisih absolut antara rating yang diprediksi dan rating aktual.
-2. RMSE (Root Mean Squared Error): Mengukur akar dari rata-rata kuadrat selisih antara rating yang diprediksi dan aktual, memberikan penalti lebih besar untuk kesalahan yang besar.
+#### 1. MAE (Mean Absolute Error): Mengukur rata-rata selisih absolut antara rating yang diprediksi dan rating aktual.
+#### 2. RMSE (Root Mean Squared Error): Mengukur akar dari rata-rata kuadrat selisih antara rating yang diprediksi dan aktual, memberikan penalti lebih besar untuk kesalahan yang besar.
 
 Kedua metrik ini dihitung selama proses pelatihan dan divisualisasikan menggunakan grafik, baik untuk data pelatihan maupun data validasi.
 
 #### Hasil Evaluasi Model Collaborative Filtering
 Evaluasi model dilakukan menggunakan metrik Mean Absolute Error (MAE) dan Root Mean Squared Error (RMSE) pada data validasi. Nilai akhir diperoleh dari epoch terakhir selama proses training model.
 
-![image](https://github.com/user-attachments/assets/70a5b4fa-5743-4b32-94bc-fe1e73ec13ce)
+![image](https://github.com/user-attachments/assets/2f521310-1af5-4b26-b0a4-407f13e8131a)
 
-Evaluation
-Untuk mengevaluasi sistem rekomendasi, digunakan dua metrik:
 
-- CBF (Content-Based Filtering): menggunakan Precision@k, yang mengukur proporsi item yang relevan di antara yang direkomendasikan. Dalam hal ini digunakan Precision@5.
+### Hasil Evaluasi Model Collaborative Filtering (CF)
+Model Collaborative Filtering Anda menunjukkan hasil evaluasi sebagai berikut:
+- Final Validation MAE (Mean Absolute Error): 0.3613
+- Final Validation RMSE (Root Mean Squared Error): 0.4318
+- 
+Angka-angka ini mencerminkan performa model dalam memprediksi rating pada data validasi. MAE sebesar 0.3613 berarti rata-rata selisih absolut antara rating prediksi dan rating aktual adalah sekitar 0.36. Sedangkan RMSE sebesar 0.4318 mengindikasikan deviasi rata-rata (dengan penalti lebih besar untuk kesalahan besar) antara prediksi dan nilai aktual.
 
-- CF (Collaborative Filtering): menggunakan Mean Absolute Error (MAE) dan Root Mean Squared Error (RMSE) untuk mengukur seberapa dekat prediksi rating terhadap rating aktual pada data validasi.
+Kedua nilai metrik ini tergolong rendah, menunjukkan bahwa model memiliki kemampuan prediksi yang cukup baik dan rating yang diprediksi relatif dekat dengan nilai sebenarnya (mengingat skala rating umum, misalnya 1-5).
 
-Hasil Evaluasi:
-- CBF: Precision@5 = 0.6 (artinya 60% dari 5 rekomendasi relevan bagi pengguna)
-- CF:
-  - MAE = 0.3550
-  - RMSE = 0.4312
-
-Nilai-nilai tersebut menunjukkan bahwa model Collaborative Filtering memiliki performa yang cukup baik dan prediksi rating yang relatif dekat dengan nilai sebenarnya.
-
-1. Visualisasi Mean Absolute Error (MAE) Selama Pelatihan
+### 1. Visualisasi Mean Absolute Error (MAE) Selama Pelatihan
 
 Kode ini digunakan untuk memvisualisasikan perkembangan nilai Mean Absolute Error (MAE) dari model Collaborative Filtering berbasis neural network selama proses pelatihan. Grafik yang dihasilkan menampilkan dua kurva: satu untuk data pelatihan (Train) dan satu untuk data validasi (Validation), yang menunjukkan bagaimana performa model dalam memprediksi rating pada kedua dataset tersebut seiring bertambahnya epoch. Visualisasi ini penting untuk memantau apakah model belajar dengan baik atau mulai mengalami overfitting ketika performa validasi mulai menurun.
 
@@ -671,24 +705,27 @@ Kode ini digunakan untuk memvisualisasikan perkembangan nilai Mean Absolute Erro
 
 ![image](https://github.com/user-attachments/assets/2f414eeb-062a-4f32-ae5f-18b89ef06a8c)
 
-Grafik 1: Model Metrics – MAE (Mean Absolute Error)
+### Grafik: Model Metrics – MAE (Mean Absolute Error)
 
-Grafik ini menampilkan perkembangan nilai *Mean Absolute Error (MAE)* selama proses pelatihan model **Collaborative Filtering berbasis Neural Network**.
+Grafik ini menampilkan perkembangan nilai Mean Absolute Error (MAE) selama proses pelatihan model Collaborative Filtering berbasis Neural Network Anda. Terdapat dua garis pada grafik:
 
-Terdapat dua garis pada grafik:
-- Garis **biru** menunjukkan nilai MAE pada data pelatihan (*Train*)
-- Garis **oranye** menunjukkan nilai MAE pada data validasi (*Validation*)
+- Garis biru menunjukkan nilai MAE pada data pelatihan (Train).
+- Garis oranye menunjukkan nilai MAE pada data validasi (Validation).
 
-#### Interpretasi:
+Interpretasi:
 
-MAE pada data pelatihan menurun secara konsisten dari epoch ke epoch, yang mengindikasikan bahwa model mampu belajar dan menyesuaikan diri dengan baik terhadap data training.
+#### 1. Performa pada Data Pelatihan (Garis Biru):
+   
+- MAE pada data pelatihan menunjukkan penurunan yang konsisten dan signifikan dari epoch awal hingga akhir. Ini mengindikasikan bahwa model Anda berhasil belajar dengan sangat baik dari data pelatihan dan mampu mengurangi kesalahan prediksi secara progresif seiring bertambahnya iterasi pelatihan. Model berhasil menyesuaikan diri dengan pola-pola dalam data yang telah dilihatnya.
 
-Pada data validasi, MAE juga menurun di awal pelatihan, namun mulai mengalami stagnasi dan sedikit peningkatan setelah sekitar epoch ke-12 hingga ke-15. Hal ini menunjukkan bahwa model mulai kehilangan kemampuan generalisasinya terhadap data baru, yang merupakan tanda awal **overfitting ringan**.
-
-Meskipun demikian, nilai MAE pada validasi tetap cukup stabil dan berada di kisaran rendah (~0.35), yang artinya model masih memberikan prediksi rating yang cukup akurat secara umum.
+#### 2. Performa pada Data Validasi (Garis Oranye):
 
 
-2. Visualisasi Root Mean Squared Error (RMSE) Selama Pelatihan
+- MAE pada data validasi juga menunjukkan penurunan yang baik di awal pelatihan (sekitar epoch 0 hingga 5). Ini menandakan bahwa model mampu menggeneralisasi dengan baik pada data baru yang belum pernah dilihat sebelumnya pada fase awal pelatihan.
+- Namun, setelah sekitar epoch ke-8 hingga ke-10, penurunan MAE pada data validasi mulai melambat dan cenderung stagnan, bahkan sedikit meningkat di epoch-epoch terakhir (sekitar epoch 15-20).
+- Fenomena ini adalah indikasi adanya overfitting ringan. Model mulai terlalu "menghafal" pola-pola spesifik pada data pelatihan (sehingga MAE train terus turun drastis), namun kehilangan kemampuannya untuk menggeneralisasi dengan baik pada data yang tidak dikenal (data validasi). Kesenjangan antara MAE train dan MAE validation menjadi semakin lebar di epoch-epoch akhir.
+
+### 2. Visualisasi Root Mean Squared Error (RMSE) Selama Pelatihan
 
 Kode ini digunakan untuk memplot perkembangan nilai Root Mean Squared Error (RMSE) dari model Collaborative Filtering selama proses pelatihan. Grafik memperlihatkan perbandingan error antara data pelatihan dan validasi pada setiap epoch. RMSE memberikan gambaran seberapa besar deviasi antara prediksi dan nilai aktual, dengan penalti lebih besar untuk kesalahan yang lebih jauh. Visualisasi ini membantu mengidentifikasi apakah model terus membaik, stagnan, atau mulai mengalami overfitting seiring berjalannya pelatihan.
 
@@ -696,21 +733,23 @@ Kode ini digunakan untuk memplot perkembangan nilai Root Mean Squared Error (RMS
 
 ![image](https://github.com/user-attachments/assets/509428db-8bf6-4f83-8fba-464ece274931)
 
-Grafik 2: Model Metrics – RMSE (Root Mean Squared Error)
+### Grafik: Model Metrics – RMSE (Root Mean Squared Error)
 
-Grafik ini menggambarkan perubahan nilai *Root Mean Squared Error (RMSE)* selama proses pelatihan model **Collaborative Filtering menggunakan Neural Network**.
+Grafik ini menggambarkan perubahan nilai Root Mean Squared Error (RMSE) selama proses pelatihan model Collaborative Filtering menggunakan Neural Network Anda. Sama seperti grafik MAE, terdapat dua garis yang ditampilkan:
 
-Dua garis yang ditampilkan memiliki arti sebagai berikut:
-- Garis **biru** menunjukkan RMSE pada data pelatihan (*Train*)
-- Garis **oranye** menunjukkan RMSE pada data validasi (*Validation*)
+- Garis biru menunjukkan RMSE pada data pelatihan (Train).
+- Garis oranye menunjukkan RMSE pada data validasi (Validation).
+Interpretasi:
 
-#### Interpretasi:
+3### 1. Performa pada Data Pelatihan (Garis Biru):
+   
+- RMSE pada data pelatihan menunjukkan penurunan yang konsisten dan signifikan seiring bertambahnya jumlah epoch. Ini menandakan bahwa model belajar dengan sangat baik dari data pelatihan dan mampu meminimalkan kesalahan prediksi secara efektif pada data yang telah dilihatnya. Penurunan yang curam ini menunjukkan bahwa model terus menyesuaikan bobotnya untuk lebih akurat memprediksi rating yang ada dalam dataset pelatihan.
 
-RMSE pada data pelatihan mengalami penurunan yang konsisten seiring bertambahnya jumlah epoch, menandakan bahwa model belajar dengan baik terhadap data yang telah diberikan.
+#### 2. Performa pada Data Validasi (Garis Oranye):
 
-Pada data validasi, RMSE juga mengalami penurunan pada awal pelatihan dan cenderung stabil setelah sekitar epoch ke-12 hingga ke-15. Namun, setelah titik tersebut, RMSE validasi terlihat mulai stagnan atau sedikit meningkat, yang dapat menjadi sinyal **overfitting ringan**—dimana model terlalu menyesuaikan diri terhadap data pelatihan dan kehilangan kemampuan generalisasi terhadap data baru.
-
-Meskipun begitu, nilai RMSE validasi tetap berada di kisaran rendah (~0.4), yang masih tergolong baik dalam konteks prediksi rating (dengan skala umum 1–5).
+- RMSE pada data validasi juga menunjukkan penurunan awal yang sehat (sekitar epoch 0 hingga 5). Ini menunjukkan bahwa model mampu menggeneralisasi dengan baik pada data baru di fase awal pelatihan.
+- Namun, setelah kira-kira epoch ke-8 hingga ke-10, penurunan RMSE pada data validasi mulai melambat secara drastis, stagnan, dan bahkan sedikit meningkat di epoch-epoch terakhir (sekitar epoch 15-20).
+- Pola ini sangat mirip dengan grafik MAE validasi dan merupakan indikasi yang kuat adanya overfitting ringan. Model menjadi terlalu spesifik terhadap data pelatihan, sehingga kinerja pada data yang belum pernah dilihat (data validasi) mulai terganggu. Kesenjangan antara RMSE train dan RMSE validation terus melebar.
 
 
 ## Kesimpulan Evaluasi Sistem Rekomendasi
@@ -728,7 +767,7 @@ Evaluasi terhadap dua pendekatan sistem rekomendasi, yaitu **Content-Based Filte
 - Evaluasi dilakukan dengan memantau metrik **MAE (Mean Absolute Error)** dan **RMSE (Root Mean Squared Error)** selama proses pelatihan.
 - Baik MAE maupun RMSE pada data pelatihan menunjukkan penurunan yang konsisten, menandakan bahwa model berhasil mempelajari pola interaksi pengguna dengan baik.
 - Pada data validasi, metrik juga menurun di awal pelatihan namun cenderung **stagnan atau sedikit meningkat setelah epoch ke-15**, menandakan potensi **overfitting ringan**.
-- Meskipun demikian, nilai error tetap rendah (MAE ~0.35 dan RMSE ~0.4), menunjukkan model memiliki kemampuan prediksi yang cukup akurat.
+- Meskipun demikian, nilai error tetap rendah (MAE 0.3613 dan RMSE 0.4318), menunjukkan model memiliki kemampuan prediksi yang cukup akurat.
 - Ke depan, performa model dapat lebih ditingkatkan dengan menggunakan **early stopping**, **dropout**, atau strategi regularisasi lainnya untuk menghindari overfitting.
 
 ###  Rangkuman Umum:
@@ -740,36 +779,3 @@ Langkah selanjutnya dapat mencakup:
 - Evaluasi lebih luas terhadap tempat dari kategori berbeda.
 - Penerapan teknik hybrid untuk memadukan kekuatan CBF dan CF.
 - Integrasi feedback pengguna secara langsung untuk terus menyempurnakan model rekomendasi.
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
