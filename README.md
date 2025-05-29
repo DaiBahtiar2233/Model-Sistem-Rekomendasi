@@ -83,30 +83,22 @@ Dengan fungsi .info(), kita dapat mengecek:
 ![image](https://github.com/user-attachments/assets/04d1d2a5-c50d-4ca3-9860-0732156ad0fd)
 
 ![image](https://github.com/user-attachments/assets/e3f8943a-ec6e-4a67-9afe-707b71ff3454)
+. 
 
-#### 2. Pembersihan Kolom Tidak Relevan
-
-Pada tahap ini, dilakukan penghapusan kolom-kolom yang tidak diperlukan atau tidak memiliki nilai informasi penting untuk analisis dan pemodelan. Kolom yang dihapus antara lain:
-- Coordinate
-- Unnamed: 11
-- Unnamed: 12
-
-Kolom-kolom ini berasal dari hasil ekspor file CSV yang kurang bersih atau tidak relevan dengan tujuan analisis. Penghapusan dilakukan secara otomatis untuk setiap dataset (user, tourism, rating, dan package) jika kolom tersebut ditemukan. 
-
-#### 3. Pengecekan Missing Values
+#### 2. Pengecekan Missing Values
 
 Pada tahap ini, dilakukan pengecekan untuk melihat apakah ada nilai yang hilang (missing values) di dalam setiap dataset. Missing values dapat mempengaruhi kualitas model, oleh karena itu perlu dilakukan penanganan lebih lanjut seperti pengisian atau penghapusan data yang hilang.
 ![image](https://github.com/user-attachments/assets/66e5a1d4-c28a-463e-9bc4-a755c7ccfc03)
 
 Hasil pengecekan missing values akan menunjukkan jumlah missing values di setiap kolom pada dataset df_package, df_rating, df_tourism, dan df_user. Ini akan memberi gambaran tentang kualitas data yang dimiliki.
 
-#### 4. Menangani Duplikat Data
+#### 3. Menangani Duplikat Data
 
 Di bawah ini adalah pemeriksaan jumlah data duplikat untuk masing-masing dataset. Duplikat dapat mempengaruhi kualitas analisis dan model, sehingga penting untuk mengidentifikasinya dan mengambil tindakan yang sesuai.
 
 ![image](https://github.com/user-attachments/assets/46dddec0-ef10-43ec-a8e2-32ffdfad7201)
 
-#### 5. Visualisasi Distribusi Fitur Numerik
+#### 4. Visualisasi Distribusi Fitur Numerik
 
 Bagian ini bertujuan untuk memvisualisasikan distribusi fitur numerik yang terdapat pada setiap dataset untuk membantu memahami data lebih baik.
 - numeric_dfs: List ini berisi DataFrame yang hanya mencakup kolom numerik dari setiap dataset.
@@ -120,7 +112,7 @@ Bagian ini bertujuan untuk memvisualisasikan distribusi fitur numerik yang terda
 
 Visualisasi ini membantu kita memahami sebaran data numerik, serta mendeteksi adanya pencilan atau pola distribusi tertentu di setiap dataset.
 
-#### 6. Visualisasi Pairplot untuk Fitur Numerik
+#### 5. Visualisasi Pairplot untuk Fitur Numerik
 
 Bagian ini berfungsi untuk memvisualisasikan hubungan antar fitur numerik menggunakan pairplot. Pairplot memungkinkan kita untuk melihat distribusi dari setiap fitur dan korelasi antar fitur dalam dataset.
 
@@ -137,7 +129,7 @@ Penjelasan:
 Jika dataset memiliki lebih dari 5 kolom numerik, pairplot akan dilewati untuk menjaga visualisasi tetap relevan dan tidak membingungkan.
 
 
-#### 7. Visualisasi Heatmap Korelasi
+#### 6. Visualisasi Heatmap Korelasi
 
 Bagian ini bertujuan untuk menampilkan heatmap korelasi antar fitur numerik dalam setiap dataset. Heatmap korelasi memungkinkan kita untuk dengan cepat mengidentifikasi hubungan antar variabel, dengan warna yang menunjukkan tingkat korelasi antara fitur-fitur tersebut.
 
@@ -160,7 +152,7 @@ Bagian ini bertujuan untuk menampilkan heatmap korelasi antar fitur numerik dala
 - Bisa menjadi indikasi untuk pemilihan fitur atau penghapusan fitur yang sangat berkorelasi tinggi (multikolinearitas).
 
 
-#### 8. Visualisasi Distribusi Kategorikal
+#### 7. Visualisasi Distribusi Kategorikal
 
 Bagian ini digunakan untuk menampilkan distribusi fitur kategorikal pada setiap dataset. Visualisasi yang digunakan berupa countplot dan barplot, untuk memberikan gambaran mengenai seberapa banyak setiap kategori muncul dalam dataset.
 
@@ -190,7 +182,7 @@ Bagian ini digunakan untuk menampilkan distribusi fitur kategorikal pada setiap 
 - Memberikan wawasan untuk memperbaiki data seperti kategori yang jarang muncul (outlier kategorikal), atau memilih fitur kategorikal mana yang penting untuk model.
 
 
-#### 9. Statistik Deskriptif Fitur Kategorikal
+#### 8. Statistik Deskriptif Fitur Kategorikal
 
 Bagian ini akan menampilkan statistik deskriptif untuk kolom-kolom bertipe kategorikal (tipe data object) di setiap dataset. Statistik deskriptif ini memberikan informasi tentang distribusi nilai dalam kolom kategorikal.
 
@@ -222,7 +214,7 @@ Bagian ini akan menampilkan statistik deskriptif untuk kolom-kolom bertipe kateg
 - Dapat menunjukkan apakah data tersebut memiliki banyak kategori yang unik atau apakah ada kategori yang sangat jarang, yang penting untuk desain model rekomendasi.
 
 
-#### 10. Distribusi Jumlah Rating per User dan per Tempat Wisata
+#### 9. Distribusi Jumlah Rating per User dan per Tempat Wisata
 
 Visualisasi ini bertujuan untuk memahami pola interaksi pengguna terhadap tempat wisata berdasarkan data rating. Terdapat dua histogram yang ditampilkan:
 
@@ -237,7 +229,7 @@ Menampilkan jumlah rating yang diterima oleh masing-masing tempat wisata. Visual
 Kedua visualisasi ini penting dalam proses eksplorasi data untuk memberikan gambaran umum tentang distribusi interaksi antara pengguna dan item (tempat wisata) sebelum membangun sistem rekomendasi.
 
 
-#### 11. Distribusi Data Berdasarkan Lokasi, Kategori, dan Kota
+#### 10. Distribusi Data Berdasarkan Lokasi, Kategori, dan Kota
 
 Bagian ini menampilkan informasi terkait lokasi pengguna, kategori tempat wisata, dan distribusi kota pada paket wisata.
 ![image](https://github.com/user-attachments/assets/b634bceb-7f2a-4ad0-913c-62419c30673f)
@@ -266,61 +258,73 @@ Bagian ini menampilkan informasi terkait lokasi pengguna, kategori tempat wisata
 
 ## 4. Data Preparation
 
-#### 1. Penanganan Missing Values
+#### 1. Pembersihan Kolom Tidak Relevan
+
+Pada tahap ini, dilakukan penghapusan kolom-kolom yang tidak diperlukan atau tidak memiliki nilai informasi penting untuk analisis dan pemodelan. Kolom yang dihapus antara lain:
+- Coordinate
+- Unnamed: 11
+- Unnamed: 12
+
+Kolom-kolom ini berasal dari hasil ekspor file CSV yang kurang bersih atau tidak relevan dengan tujuan analisis. Penghapusan dilakukan secara otomatis untuk setiap dataset (user, tourism, rating, dan package) jika kolom tersebut ditemukan.
+
+![image](https://github.com/user-attachments/assets/8e82c80b-8751-4eec-9f23-065e2ab7ddfd)
+
+
+#### 2. Penanganan Missing Values
 
 Untuk memastikan kualitas data, dilakukan pemeriksaan dan penghapusan nilai kosong (missing values) pada setiap dataset (df_user, df_rating, df_tourism, dan df_package). Proses ini dilakukan menggunakan fungsi dropna(), diikuti dengan pengecekan ulang untuk memastikan tidak ada nilai yang hilang tersisa.
 
-![image](https://github.com/user-attachments/assets/7d01a501-f773-46fd-af62-8b7818a70728)
+![image](https://github.com/user-attachments/assets/837a7856-0afe-41ac-8772-d4d85593b511)
 
-#### 2. penghapusan data duplikat
+![image](https://github.com/user-attachments/assets/32aae3a5-7284-4e96-bbf6-15dd7330837e)
 
+
+#### 3. penghapusan data duplikat
 Pada tahap awal preprocessing, dilakukan penghapusan data yang bersifat duplikat pada seluruh dataframe yang digunakan, yaitu: df_user, df_rating, `dfdf_tourism, dan df_package. Kebera
 
 Langkah ini memastikan bahwa setiap entri dalam dataset bersifat unik dan valid sebelum dilakukan proses lebih lanjut seperti penanganan nilai yang hilang atau pengkodean data.
 
-![image](https://github.com/user-attachments/assets/b33d2de2-9d46-402e-86f3-600261f14eb8)
+![image](https://github.com/user-attachments/assets/9f367453-4839-4447-bd62-524c0f3103ee)
 
+![image](https://github.com/user-attachments/assets/c1846d55-3709-44e9-9e57-0554626ab337)
 
-#### 3. Deteksi Outlier Menggunakan Boxpl
+#### 4. Deteksi Outlier Menggunakan Boxpl
 
 Untuk mengidentifikasi adanya outlier dalam data numerik, dilakukan visualisasi boxplot pada masing-masing dataframe: df_package, `df_ratindf_rating, `df_pariwisata_df_tourism, dan df_user.
 
 Langkah ini penting dilakukan sebelum melakukan normalisasi atau proses machine learning lainnya, karena outlier dapat mempengaruhi performa model secara signifikan. Dengan visualisasi ini, pengguna dapat dengan mudah mengamati distribusi data dan menentukan perlakuan selanjutnya terhadap outlier
 
-![image](https://github.com/user-attachments/assets/9077d896-6f5d-41d6-ad1a-d3effa4c6c5f)
 
-![image](https://github.com/user-attachments/assets/3f98314d-4dbf-4f9d-9b37-d994448aeb4c)
+#### 5. 
 
-![image](https://github.com/user-attachments/assets/db13ba90-6182-4848-939f-b377ff65c87b)
+#### 6. 
 
-![image](https://github.com/user-attachments/assets/7952a9d9-1f42-44fc-9538-e38f52aa1201)
+#### 7. 
+
+#### 8. 
 
 
-#### 4. Menghapus Outlier Menggunakan Metode IQR
+#### 9. 
 
-Pada bagian ini, dilakukan pembersihan data dari nilai-nilai ekstrem (outlier) menggunakan metode Interquartile Range (IQR). Outlier dapat mempengaruhi hasil analisis dan performa model. Oleh karena itu, penting untuk menghapusnya.
 
-Fungsi remove_outliers_iqr digunakan untuk memfilter data berdasarkan nilai Q1 (kuartil bawah) dan Q3 (kuartil atas), dengan batas toleransi sebesar 1.5 * IQR. Fungsi ini diterapkan ke seluruh kolom numerik dari beberapa dataset, seperti df_user, df_rating, df_tourism, dan df_package. Sebelum dan sesudah proses, ukuran dataset dibandingkan untuk mengetahui seberapa banyak data yang terdeteksi sebagai outlier dan dihapus.
-
-![image](https://github.com/user-attachments/assets/05c38233-f8db-4f88-9c2d-f622957dc1f3)
+#### 10. 
 
 
 
-#### 5. Visualisasi Boxplot setelah Penghapusan Outlier
-Pada tahap ini, dilakukan visualisasi menggunakan boxplot untuk masing-masing dataset (User, Rating, Tourism, dan Package). Boxplot digunakan untuk:
-- Melihat distribusi data numerik
-- Mengidentifikasi outlier secara visual
-- Memahami sebaran dan variasi data
 
-Setiap grafik menampilkan kolom-kolom numerik dari masing-masing DataFrame. Proses ini membantu dalam validasi apakah metode penghapusan outlier sebelumnya telah bekerja secara efektif.
 
-![image](https://github.com/user-attachments/assets/16894ae8-5f39-4c35-ace2-8e0c202a1c7b)
 
-![image](https://github.com/user-attachments/assets/95b538cb-3968-4285-9f3b-ab4e33ab9167)
 
-![image](https://github.com/user-attachments/assets/267977d0-2d11-4976-8e55-00a7a802c978)
 
-![image](https://github.com/user-attachments/assets/db69d040-d987-4747-b231-80d4555bc4db)
+
+
+
+
+
+
+
+
+
 
 
 
