@@ -315,7 +315,7 @@ Langkah ini memastikan bahwa setiap entri dalam dataset bersifat unik dan valid 
 
 ![image](https://github.com/user-attachments/assets/c1846d55-3709-44e9-9e57-0554626ab337)
 
-#### 4. Deteksi Outlier Menggunakan Boxpl
+#### 4. Deteksi Outlier Menggunakan Boxplot
 
 Untuk mengidentifikasi adanya outlier dalam data numerik, dilakukan visualisasi boxplot pada masing-masing dataframe: df_package, df_rating, df_tourism, dan df_user.
 
@@ -379,14 +379,25 @@ TF-IDF (Term Frequency–Inverse Document Frequency) digunakan untuk mengubah da
 ![image](https://github.com/user-attachments/assets/1c534dc1-e8c9-4abb-837c-5b3909ec5e15)
 
 
-#### 9. Penggabungan Data untuk Collaborative Filtering
+#### 9. Mapping Nama Tempat ke Index
+
+Kode ini membuat Series bernama indices yang berfungsi untuk memetakan nama tempat wisata ke indeks baris pada dataframe df_tourism. Mapping ini sangat penting dalam proses Content-Based Filtering, karena sistem perlu mengetahui baris ke berapa dari suatu tempat wisata berdasarkan nama yang dimasukkan oleh pengguna (misalnya saat pengguna memilih tempat favoritnya sebagai input rekomendasi).
+
+Misalnya, saat pengguna memilih tempat wisata "Museum Taman Prasasti", sistem menggunakan indices['Museum Taman Prasasti'] untuk menemukan indeks baris tempat tersebut, lalu mengambil vektor TF-IDF-nya dan membandingkan dengan tempat lain untuk menghasilkan rekomendasi berdasarkan kemiripan konten.
+
+Fungsi drop_duplicates() digunakan untuk menghindari duplikasi nama tempat wisata agar mapping yang dibuat unik dan tidak ambigu.
+
+![image](https://github.com/user-attachments/assets/76903675-b555-411d-9d84-e648748b14be)
+
+
+#### 10. Penggabungan Data untuk Collaborative Filtering
 
 ![image](https://github.com/user-attachments/assets/06c1ad98-95fd-419f-9bc6-b5ff69b13e2a)
 
 Langkah ini menggabungkan tiga data utama: data rating (df_rating), data pengguna (df_user), dan data tempat wisata (df_tourism). Penggabungan dilakukan berdasarkan User_Id dan Place_Id, sehingga membentuk satu dataframe komprehensif (df) yang memuat informasi lengkap tentang siapa yang memberi rating, terhadap tempat wisata mana, dan informasi kontennya.
 
 
-#### 10. Encoding ID Pengguna dan Tempat
+#### 11. Encoding ID Pengguna dan Tempat
 
 ![image](https://github.com/user-attachments/assets/002da12e-bf3d-40c4-b44d-2ff671113e22)
 
@@ -396,7 +407,7 @@ Pada tahap ini, dilakukan transformasi ID pengguna (User_Id) dan ID tempat (Plac
 - num_users dan num_places menyimpan jumlah unik pengguna dan tempat wisata, yang dibutuhkan untuk menentukan ukuran embedding dalam model rekomendasi.
 
 
-#### 11. Normalisasi Rating
+#### 12. Normalisasi Rating
 
 ![image](https://github.com/user-attachments/assets/d9382fe9-eca7-4987-8f61-e18ba822dea5)
 
@@ -405,17 +416,18 @@ Sebelum pelatihan model, rating dari pengguna perlu dinormalisasi agar berada da
 - rating_normalized: menghitung nilai rating yang telah dinormalisasi menggunakan rumus:
 
 
+#### 13. Pembagian Data untuk Pelatihan dan Validasi
 
-#### 12. Pembagian Data untuk Pelatihan dan Validasi
-Setelah data disiapkan, langkah selanjutnya adalah memisahkan fitur dan label, serta membagi data menjadi data latih dan data validasi.
-- x: berisi pasangan (user, place) sebagai input fitur.
-- y: berisi nilai rating yang telah dinormalisasi sebagai target.
-- train_test_split: membagi data menjadi 80% untuk pelatihan dan 20% untuk validasi agar model dapat dievaluasi performanya selama training.
+Langkah ini memisahkan fitur (x) dan label (y), lalu membagi data menjadi 80% untuk pelatihan dan 20% untuk validasi menggunakan train_test_split.
+- x: pasangan (user, place) sebagai input.
+- y: rating yang telah dinormalisasi sebagai target.
+
+Pembagian ini bertujuan untuk menguji performa model pada data yang belum pernah dilihat. Parameter random_state=42 memastikan hasil pembagian selalu konsisten.
 
 ![image](https://github.com/user-attachments/assets/ed1d1b1e-b8e0-479f-8ceb-8d866a125bfa)
 
 
-#### 13. Visualisasi Bigram Menggunakan TF-IDF pada Nama Tempat Wisata
+#### 14. Visualisasi Bigram Menggunakan TF-IDF pada Nama Tempat Wisata
    
 Pada bagian ini, dilakukan analisis terhadap bigram, yaitu kombinasi dua kata yang muncul secara berurutan dalam nama tempat wisata. Untuk menghitung bobot kemunculan bigram, digunakan pendekatan TF-IDF (Term Frequency-Inverse Document Frequency) yang tidak hanya mempertimbangkan frekuensi kata, tetapi juga signifikansi relatifnya di seluruh dokumen.
 
@@ -426,7 +438,7 @@ Visualisasi ini membantu kita memahami struktur frasa yang dominan, yang dapat d
 ![image](https://github.com/user-attachments/assets/c35bf313-dc34-45a3-953b-f36fb3c81269)
 
 
-#### 14. Visualisasi Trigram Menggunakan TF-IDF pada Nama Tempat Wisata
+#### 15. Visualisasi Trigram Menggunakan TF-IDF pada Nama Tempat Wisata
    
 Setelah analisis bigram, dilakukan pula analisis terhadap trigram, yaitu kombinasi tiga kata yang muncul berurutan dalam nama tempat wisata. Seperti sebelumnya, metode TF-IDF digunakan untuk mengukur pentingnya trigram yang muncul, bukan hanya berdasarkan frekuensinya tetapi juga berdasarkan tingkat kekhususan trigram di seluruh data.
 
@@ -435,21 +447,6 @@ Trigram dapat memberikan informasi yang lebih kontekstual dibanding unigram (sat
 Visualisasi ini membantu mengidentifikasi pola atau struktur umum dalam penamaan tempat wisata yang bisa dimanfaatkan lebih lanjut untuk proses ekstraksi fitur dalam sistem rekomendasi berbasis konten.
 
 ![image](https://github.com/user-attachments/assets/3d936eee-d1a9-43d5-9396-e58ffc2212b1)
-
-
-
-#### 15. Mapping Nama Tempat ke Index
-
-Kode ini membuat Series bernama indices yang berfungsi untuk memetakan nama tempat wisata ke indeks barisnya di df_tourism. Mapping ini penting untuk mengambil indeks tempat tertentu berdasarkan namanya saat melakukan pencarian rekomendasi. Fungsi drop_duplicates() digunakan agar tidak ada nama tempat yang terduplikasi.
-
-![image](https://github.com/user-attachments/assets/76903675-b555-411d-9d84-e648748b14be)
-
-
-#### 16. Penggabungan Data untuk Collaborative Filtering
-
-Langkah ini menggabungkan tiga data utama: data rating (df_rating), data pengguna (df_user), dan data tempat wisata (df_tourism). Penggabungan dilakukan berdasarkan User_Id dan Place_Id, sehingga membentuk satu dataframe komprehensif (df) yang memuat informasi lengkap tentang siapa yang memberi rating, terhadap tempat wisata mana, dan informasi kontennya.
-
-![image](https://github.com/user-attachments/assets/9b4cb776-a9c3-41dc-bfae-e6f22addb4ae)
 
 
 
@@ -518,10 +515,25 @@ Contoh berikut menunjukkan cara memanggil fungsi get_recommendations dengan mema
 
 #### 1. Arsitektur Model Recommender (Collaborative Filtering)
 
-Model rekomendasi ini menggunakan pendekatan Collaborative Filtering berbasis neural network, yang memetakan pengguna dan tempat wisata ke dalam vektor embedding.
-- user_embedding dan place_embedding: menghasilkan representasi vektor (embedding) untuk pengguna dan tempat.
-- user_bias dan place_bias: menambahkan bias untuk masing-masing pengguna dan tempat.
-- dot_user_place: menghitung interaksi (kemiripan) antara pengguna dan tempat dengan operasi perkalian dot product.
+Model RecommenderNet adalah model Collaborative Filtering berbasis neural network yang digunakan untuk memprediksi skor rating antara pengguna dan tempat wisata. Model ini mempelajari representasi vektor (embedding) dari pengguna dan tempat, serta bias masing-masing.
+
+  #### Parameter-Parameter Kunci:
+- embedding_size: Ukuran dimensi dari vektor embedding. Dalam implementasi ini, nilainya adalah 50, artinya setiap pengguna dan tempat direpresentasikan dalam ruang vektor berdimensi 50.
+- embeddings_initializer='he_normal': Inisialisasi bobot pada layer embedding menggunakan distribusi He normal, yang cocok untuk model non-linear dengan ReLU.
+- embeddings_regularizer=keras.regularizers.l2(1e-6): Regularisasi L2 digunakan untuk mencegah overfitting dengan menghukum bobot embedding besar.
+
+  #### Komponen Arsitektur Model:
+- self.user_embedding: Layer embedding yang mengubah ID pengguna menjadi vektor berdimensi 50.
+- self.place_embedding: Layer embedding yang mengubah ID tempat menjadi vektor berdimensi 50.
+- self.user_bias: Layer embedding satu dimensi yang memberikan bias khusus untuk setiap pengguna.
+- self.place_bias: Layer embedding satu dimensi yang memberikan bias khusus untuk setiap tempat.
+
+  #### Fungsi call(inputs):
+- Input model adalah tensor 2D dengan 2 kolom: inputs[:, 0] untuk ID pengguna, dan inputs[:, 1] untuk ID tempat.
+- Langkah-langkah:
+  - Ambil vektor embedding dan bias dari pengguna dan tempat.
+  - Lakukan operasi dot product antara vektor pengguna dan tempat untuk menghitung skor kecocokan.
+  -Tambahkan bias pengguna dan bias tempat ke skor tersebut.
 
 ![image](https://github.com/user-attachments/assets/9a4d5191-0382-4918-b459-aad951209ec7)
 
@@ -530,27 +542,37 @@ Output dari model ini adalah prediksi skor rating yang mewakili seberapa cocok s
 
 #### 2. Definisi Model Rekomendasi – RecommenderNet
 
-Model RecommenderNet merupakan implementasi Collaborative Filtering berbasis neural network menggunakan TensorFlow. Model ini belajar merepresentasikan pengguna dan tempat wisata sebagai vektor dalam ruang berdimensi rendah (embedding), lalu menghitung kecocokan antar keduanya.
+Model RecommenderNet adalah implementasi dari pendekatan Collaborative Filtering berbasis neural network. Model ini mempelajari representasi laten (latent factors) dari pengguna dan tempat wisata dalam bentuk vektor embedding.
 
-Komponen Utama:
-- user_embedding & place_embedding: menghasilkan vektor representasi (embedding) dari pengguna dan tempat.
-- user_bias & place_bias: menyertakan nilai bias untuk setiap pengguna dan tempat.
-- dot_user_place: menghitung skor kecocokan (prediksi rating) dengan perkalian dot product antara embedding pengguna dan tempat, ditambah bias masing-masing.
+Komponen Utama Model:
 
-Output dari model ini adalah nilai prediksi rating antara pengguna dan tempat wisata.
+#### user_embedding dan place_embedding
+Lapisan ini memetakan ID pengguna dan ID tempat wisata ke dalam vektor embedding berdimensi tetap. Vektor ini merepresentasikan karakteristik laten dari masing-masing entitas.
+
+#### user_bias dan place_bias
+Menambahkan bias masing-masing pengguna dan tempat wisata ke dalam prediksi, yang membantu menangkap kecenderungan umum dari pengguna (misalnya sering memberi rating tinggi) atau tempat (misalnya populer secara umum).
+
+#### dot_user_place
+Mengukur tingkat kecocokan antara pengguna dan tempat wisata dengan menghitung dot product dari vektor embedding keduanya.
+
+#### Output akhir
+Prediksi skor interaksi dihitung dengan menjumlahkan dot_user_place, user_bias, dan place_bias. Skor ini menggambarkan seberapa cocok suatu tempat bagi pengguna tertentu.
+
 
 ![image](https://github.com/user-attachments/assets/e777a962-483e-421c-92f4-fef267d00c89)
 
 #### 3. Kompilasi Model Rekomendasi
 
 Setelah mendefinisikan arsitektur model RecommenderNet, langkah selanjutnya adalah melakukan kompilasi dengan konfigurasi sebagai berikut:
-- Loss Function: mean_squared_error – digunakan untuk mengukur selisih antara rating aktual dan prediksi.
-- Optimizer: Adam – algoritma optimisasi yang efisien dengan learning rate sebesar 0.001.
-- Metrics:
-  - MeanAbsoluteError – mengukur rata-rata kesalahan absolut dari prediksi.
-  - RootMeanSquaredError – mengukur akar dari rata-rata kuadrat kesalahan, berguna untuk mengevaluasi seberapa besar penyimpangan prediksi dari nilai sebenarnya.
 
-Langkah ini penting untuk menyiapkan model sebelum proses pelatihan (training) dilakukan.
+#### Loss function
+Model menggunakan Mean Squared Error (MSE) sebagai fungsi loss. Fungsi ini mengukur selisih kuadrat antara nilai prediksi dan rating sebenarnya, dan umum digunakan untuk regresi.
+#### Optimizer
+Optimizer yang digunakan adalah Adam, yaitu metode optimasi berbasis momentum yang bekerja efisien untuk data berskala besar dan parameter tinggi. Learning rate ditetapkan sebesar 0.001.
+#### Evaluation metrics
+Dua metrik tambahan digunakan untuk mengevaluasi performa model selama pelatihan dan pengujian:
+  - MeanAbsoluteError (MAE) – mengukur rata-rata selisih absolut antara prediksi dan label asli.
+  - RootMeanSquaredError (RMSE) – mengukur akar dari rata-rata selisih kuadrat, sensitif terhadap kesalahan besar.
 
 ![image](https://github.com/user-attachments/assets/95ef75c6-c367-4898-ac20-81eb8f2617d6)
 
@@ -685,17 +707,21 @@ Kedua metrik ini dihitung selama proses pelatihan dan divisualisasikan menggunak
 #### Hasil Evaluasi Model Collaborative Filtering
 Evaluasi model dilakukan menggunakan metrik Mean Absolute Error (MAE) dan Root Mean Squared Error (RMSE) pada data validasi. Nilai akhir diperoleh dari epoch terakhir selama proses training model.
 
-![image](https://github.com/user-attachments/assets/2f521310-1af5-4b26-b0a4-407f13e8131a)
+![image](https://github.com/user-attachments/assets/2ada2166-729b-44bb-af7b-1d38c9fc1d60)
 
 
 ### Hasil Evaluasi Model Collaborative Filtering (CF)
-Model Collaborative Filtering Anda menunjukkan hasil evaluasi sebagai berikut:
-- Final Validation MAE (Mean Absolute Error): 0.3613
-- Final Validation RMSE (Root Mean Squared Error): 0.4318
-- 
-Angka-angka ini mencerminkan performa model dalam memprediksi rating pada data validasi. MAE sebesar 0.3613 berarti rata-rata selisih absolut antara rating prediksi dan rating aktual adalah sekitar 0.36. Sedangkan RMSE sebesar 0.4318 mengindikasikan deviasi rata-rata (dengan penalti lebih besar untuk kesalahan besar) antara prediksi dan nilai aktual.
 
-Kedua nilai metrik ini tergolong rendah, menunjukkan bahwa model memiliki kemampuan prediksi yang cukup baik dan rating yang diprediksi relatif dekat dengan nilai sebenarnya (mengingat skala rating umum, misalnya 1-5).
+Model Collaborative Filtering Anda menunjukkan hasil evaluasi sebagai berikut:
+
+- Final Validation MAE (Mean Absolute Error): **0.3575**  
+- Final Validation RMSE (Root Mean Squared Error): **0.4288**
+
+Angka-angka ini mencerminkan performa model dalam memprediksi rating pada data validasi.  
+MAE sebesar 0.3575 berarti rata-rata selisih absolut antara rating prediksi dan rating aktual adalah sekitar **0.36**.  
+Sedangkan RMSE sebesar 0.4288 mengindikasikan deviasi rata-rata kuadrat (yang lebih sensitif terhadap error besar) adalah sekitar **0.43**.
+
+Kedua nilai metrik ini tergolong **rendah**, menunjukkan bahwa model memiliki kemampuan prediksi yang cukup baik dan rating yang diprediksi relatif dekat dengan nilai sebenarnya (mengingat skala rating umum, misalnya 1–5).
 
 ### 1. Visualisasi Mean Absolute Error (MAE) Selama Pelatihan
 
@@ -767,7 +793,7 @@ Evaluasi terhadap dua pendekatan sistem rekomendasi, yaitu **Content-Based Filte
 - Evaluasi dilakukan dengan memantau metrik **MAE (Mean Absolute Error)** dan **RMSE (Root Mean Squared Error)** selama proses pelatihan.
 - Baik MAE maupun RMSE pada data pelatihan menunjukkan penurunan yang konsisten, menandakan bahwa model berhasil mempelajari pola interaksi pengguna dengan baik.
 - Pada data validasi, metrik juga menurun di awal pelatihan namun cenderung **stagnan atau sedikit meningkat setelah epoch ke-15**, menandakan potensi **overfitting ringan**.
-- Meskipun demikian, nilai error tetap rendah (MAE 0.3613 dan RMSE 0.4318), menunjukkan model memiliki kemampuan prediksi yang cukup akurat.
+- Meskipun demikian, nilai error tetap rendah (MAE 0.3575 dan RMSE 0.4288), menunjukkan bahwa model memiliki kemampuan prediksi yang cukup akurat.
 - Ke depan, performa model dapat lebih ditingkatkan dengan menggunakan **early stopping**, **dropout**, atau strategi regularisasi lainnya untuk menghindari overfitting.
 
 ###  Rangkuman Umum:
